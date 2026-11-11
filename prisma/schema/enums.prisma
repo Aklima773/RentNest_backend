@@ -1,0 +1,25 @@
+enum UserRole {
+  tenant
+  landlord
+  admin
+}
+
+enum RequestStatus {
+  pending
+  approved
+  rejected
+  completed
+}
+
+enum PaymentMethod {
+  Stripe
+  SSLCommerz
+
+}
+
+enum PaymentStatus {
+  pending
+  completed
+  failed
+
+}

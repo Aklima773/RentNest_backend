@@ -1,0 +1,42 @@
+{
+  "name": "prisma-press-backend",
+  "version": "0.0.1",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "sever.ts",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "stripe:webhook": "stripe listen --all-snapshot --forward-to localhost:5000/api/subscription/webhook",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "prisma migrate dev"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.5.1",
+    "@types/pg": "^8.23.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "jsonwebtoken": "^9.0.3",
+    "prisma": "^7.10.0",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.1",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/jsonwebtoken": "^9.0.10",
+    "bcryptjs": "^3.0.3",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "http-status": "^2.1.0",
+    "pg": "^8.23.0",
+    "stripe": "^23.0.0"
+  }
+}

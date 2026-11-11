@@ -1,0 +1,20 @@
+model User {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(255)
+  email     String   @unique
+  password  String
+  role      UserRole @default(tenant)
+  isBanned  Boolean  @default(false) @map("is_banned")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  profile Profile?
+
+  properties     Property[]
+  rentalRequests RentalRequest[]
+  payments       Payment[]
+  reviews        Review[]
+
+  @@map("users")
+}
+
