@@ -41,7 +41,7 @@ const getMyProfile = catchAsync (async (req: Request, res: Response, next:NextFu
 
 })
 
-const getAllUser = catchAsync (async (req: Request, res: Response, next:NextFunction)=>{
+const getAllUsers = catchAsync (async (req: Request, res: Response, next:NextFunction)=>{
 
    
 
@@ -94,7 +94,7 @@ export const userController ={
     registerUser ,
     getMyProfile,
     updateMyProfile,
-    getAllUser,
+    getAllUsers,
     updateUserStatus
 }
    

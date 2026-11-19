@@ -31,8 +31,22 @@ const getMyRentalRequests = catchAsync(async (req: Request, res: Response) => {
 
 const getLandlordPropertyRequests = catchAsync(async (req: Request, res: Response) => {
   const landlordId = req.user?.id;
-  const result = await rentalService.getLandlordRentalRequestsFromDB(landlordId as string);
+  const { propertyId } = req.params;
 
+  if (!landlordId) {
+      throw new Error("You are not logged in.");
+    }
+
+    if (!propertyId) {
+      throw new Error(
+        "Property ID is required."
+      );
+    }
+  const result = await rentalService.getLandlordRentalRequestsFromDB(
+      landlordId,
+      propertyId as string
+    );
+    
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

@@ -64,9 +64,26 @@ const getTenantRentalRequestsFromDB = async (tenantId: string) => {
   return result;
 };
 
-const getLandlordRentalRequestsFromDB = async (landlordId: string) => {
+const getLandlordRentalRequestsFromDB = async (landlordId: string, propertyId: string) => {
+ const property = await prisma.property.findUnique({
+    where: { id: propertyId },
+    select: { id: true, landlordId: true },
+  });
+
+  if (!property) {
+    throw new Error("Property not found.");
+  }
+
+  if (property.landlordId !== landlordId) {
+    throw new Error(
+      "You are not authorized to view rental requests for this property."
+    );
+  }
+
+  // 2. Fetch all rental requests for that property
   const result = await prisma.rentalRequest.findMany({
     where: {
+      propertyId,
       property: {
         landlordId,
       },

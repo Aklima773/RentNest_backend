@@ -33,7 +33,7 @@ router.delete(
 
 // Landlord Routes
 router.get(
-  "/landlord/requests",
+  "/landlord/:propertyId",
   auth(UserRole.landlord),
   rentalController.getLandlordPropertyRequests
 );

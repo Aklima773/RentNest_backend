@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { Role } from "../../generated/prisma/enums";
+
 import { catchAsync } from "../utils/catchAsync";
 import { jwtUtils } from "../utils/jwt";
 import config from "../config";
 import { JwtPayload } from "jsonwebtoken";
 import { prisma } from "../lib/prisma";
+import { UserRole } from "../../generated/prisma";
 
 declare global{
 
@@ -14,13 +15,13 @@ declare global{
                 email:string;
                 name: string;
                 id: string;
-                role:Role;
+                role:UserRole;
             }
         }
     }
 }
 
-export const auth = (...requiredRoles : Role[]) =>{
+export const auth = (...requiredRoles : UserRole[]) =>{
     return catchAsync(async (req: Request, res:Response, next: NextFunction)=>{
 
         const token = req.cookies.accessToken ? 
@@ -61,9 +62,9 @@ export const auth = (...requiredRoles : Role[]) =>{
             throw new Error("User not found. please log in again")
         }
 
-        if(user.activeStatus === "BLOCKED"){
-            throw new Error("Your account has been blocked. Please contact support ")
-        }
+        // if(user.activeStatus === "BLOCKED"){
+        //     throw new Error("Your account has been blocked. Please contact support ")
+        // }
 
         req.user={
             email,name,id,role

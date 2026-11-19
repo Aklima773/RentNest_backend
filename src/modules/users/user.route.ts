@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { userController } from "./user.controller";
-
-
 import { auth } from "../../middlewares/auth";
 import { UserRole } from "../../../generated/prisma";
 
@@ -10,14 +8,15 @@ import { UserRole } from "../../../generated/prisma";
 const router = Router();
 
 
-router.get("/",
-    auth(UserRole.admin),
-    userController.getAllUser
+router.get("/allusers",
+    
+    userController.getAllUsers
 )
 
+
+
+
 router.post("/register",userController.registerUser)
-
-
 
 
 
@@ -30,7 +29,7 @@ router.put("/my-profile", auth(UserRole.tenant, UserRole.landlord, UserRole.admi
 userController.updateMyProfile
 
 )
-router.put("/:id/status", auth(UserRole.admin),
+router.put("/:id", auth(UserRole.admin),
 userController.updateUserStatus
 
 )
