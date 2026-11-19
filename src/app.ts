@@ -2,23 +2,16 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import cookieParser from "cookie-parser" 
 import config from "./config";
 import cors from "cors";
-
-import { prisma } from "./lib/prisma";
-
 import { authRoutes } from "./modules/auth/auth.routes";
 import {reviewRoutes,} from "./modules/review/review.route";
-
-import path from "node:path";
 import { notFound } from "./middlewares/notFound";
-import  httpStatus from 'http-status';
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
-
-import { stripe } from "./lib/stripe";
-
 import { userRoutes } from "./modules/users/user.route";
 import { propertyRoutes } from "./modules/property/property.route";
 import { categoryRouter } from "./modules/category/category.route";
 import { rentalRouter } from "./modules/rentalrequest/rentalrequest.route";
+import { paymentRoutes } from "./modules/payment/payment.route";
+
 
 
 
@@ -48,6 +41,7 @@ app.use("/api/auth", authRoutes)
 app.use("/api/categories", categoryRouter);
 app.use("/api/properties", propertyRoutes)
 app.use("/api/rentalrequest", rentalRouter)
+app.use("/api/payments", paymentRoutes)
 
 app.use("/api/reviews", reviewRoutes)
 

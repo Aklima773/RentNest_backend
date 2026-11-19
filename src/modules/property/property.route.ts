@@ -18,6 +18,11 @@ router.get(
 );
 
 router.get(
+  "/",
+  propertyController.getAllProperties
+);
+
+router.get(
   "/:id",
   auth(UserRole.landlord),
   propertyController.getLandlordPropertyById

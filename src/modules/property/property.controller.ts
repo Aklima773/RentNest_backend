@@ -28,6 +28,18 @@ const getLandlordProperties = catchAsync(async (req: Request, res: Response) => 
   });
 });
 
+const getAllProperties = catchAsync(async (req: Request, res: Response) => {
+  const result = await propertyService.getAllPropertiesFromDB();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "All properties retrieved successfully",
+    data: result,
+  });
+});
+
+
 const getLandlordPropertyById = catchAsync(async (req: Request, res: Response) => {
   const landlordId = req.user?.id;
   const { id } = req.params;
@@ -76,5 +88,6 @@ export const propertyController = {
   getLandlordProperties,
   updateProperty,
   deleteProperty,
-  getLandlordPropertyById
+  getLandlordPropertyById,
+  getAllProperties
 };

@@ -1,6 +1,7 @@
 import { UserRole } from "../../../generated/prisma";
 import { prisma } from "../../lib/prisma";
 import { ICreatePropertyRequest, IUpdatePropertyRequest } from "./property.interface";
+import { PaymentStatus } from './../../../prisma/src/generated/prisma/index.d';
 
 const createProperty = async(payload: ICreatePropertyRequest, userId : string)=>{
 
@@ -28,6 +29,7 @@ const result = await prisma.$transaction(async (tx) => {
         ...payload,
         price: Number(payload.price), // Ensure compatibility with Prisma's Decimal type
         landlordId: userId,
+        
       },
       include: {
         category: true, // Optional: return category details in response
@@ -38,6 +40,18 @@ const result = await prisma.$transaction(async (tx) => {
   });
 
   return result;
+};
+
+
+const getAllPropertiesFromDB = async () => {
+  const properties = await prisma.property.findMany({
+    include: {
+      category: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return properties;
 };
 
 const getLandlordPropertiesFromDB = async (landlordId: string) => {
@@ -161,5 +175,6 @@ export const propertyService ={
     getLandlordPropertiesFromDB,
   updatePropertyIntoDB,
   deletePropertyFromDB,
-  getLandlordPropertiesByIdFromDB
+  getLandlordPropertiesByIdFromDB,
+  getAllPropertiesFromDB
 }
