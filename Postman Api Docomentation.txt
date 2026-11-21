@@ -1,0 +1,282 @@
+Documentation
+RentNest Backend
+﻿
+
+users
+﻿
+
+POST
+register
+http://localhost:5000/api/users/register
+﻿
+
+Body
+raw (json)
+View More
+json
+{
+    "name" : "kKarim",
+    "email" : "kkarim@gmail.com",
+    "password": "123456",
+    "profilePhoto": "https://www.magnific.com/free-photo/portrait-white-man-isolated_3199590.htm#fromView=keyword&page=1&position=0&uuid=60daaea7-ae49-44e9-8142-e4e074265d3d&track=ais_hybrid&query=Man+profile"
+}
+GET
+profile
+http://localhost:5000/api/users/me
+﻿
+
+Body
+raw (json)
+PUT
+update my profile
+http://localhost:5000/api/users/my-profile
+﻿
+
+Body
+raw (json)
+json
+{
+    "name" : "karim",
+    "email": "kkarim@gmail.com"
+    
+}
+GET
+get all user
+http://localhost:5000/api/users/allusers
+﻿
+
+PUT
+Update user status
+http://localhost:5000/api/users/1df06973-622e-45e6-ad6b-f91c42893f97
+﻿
+
+Body
+raw (json)
+json
+{
+    "isBanned" :false
+}
+auth
+﻿
+
+POST
+login
+http://localhost:5000/api/auth/login
+﻿
+
+Body
+raw (json)
+json
+{
+    "email": "kkarim@gmail.com",
+    "password": "123456"
+}
+property
+﻿
+
+POST
+createproperty
+http://localhost:5000/api/properties
+﻿
+
+Body
+raw (json)
+View More
+json
+{
+  "title": "Modern Luxury Apartment in Gulshan",
+  "description": "A spacious 2-bedroom fully furnished apartment with high-speed internet, modern kitchen appliances, and 24/7 security located in prime Gulshan.",
+  "price": 35000,
+  "location": "Gulshan-2, Dhaka",
+  "categoryId": "4688fc75-71e7-47d7-be84-5250f429d462",
+  "isAvailable": true
+}
+GET
+get all properties
+http://localhost:5000/api/properties
+﻿
+
+PATCH
+update propert by landlord
+http://localhost:5000/api/properties/6051aa61-3b58-447e-ab21-5aa05948062b
+﻿
+
+Body
+raw (json)
+json
+{
+  "price": 38000,
+  "isAvailable": false
+}get
+GET
+get property by id by landlord
+http://localhost:5000/api/properties/6051aa61-3b58-447e-ab21-5aa05948062b
+﻿
+
+DELETE
+delete property by landlord
+http://localhost:5000/api/properties/08002ee9-bf09-44db-a2c7-b45d4b1ed956
+﻿
+
+category
+﻿
+
+POST
+createcategory
+http://localhost:5000/api/categories
+﻿
+
+Body
+raw (json)
+View More
+json
+{
+  "name": "Villa",
+  "description": "Luxurious standalone residential properties featuring private yards, pools, and premium amenities."
+}
+GET
+get all category
+http://localhost:5000/api/categories
+﻿
+
+PUT
+update category
+http://localhost:5000/api/categories/0fbdacbd-40df-410f-bde3-aa7a79fb79fd
+﻿
+
+Body
+raw (json)
+View More
+json
+{
+  "name": "Duplexx",
+  "description": "Two-story apartments or houses connected by an internal staircase, offering extra space and privacy."
+}
+DELETE
+delete category
+http://localhost:5000/api/categories/055d9b6f-8ee3-400c-a281-b13a3d8f7c96
+﻿
+
+GET
+get category by id
+http://localhost:5000/api/categories/0a0a0698-4a4a-4cdb-bdc7-3fd1e6a5e8de
+﻿
+
+rentalrequest
+﻿
+
+POST
+requestCreate
+http://localhost:5000/api/rentalrequest
+﻿
+
+Body
+raw (json)
+json
+{
+  "propertyId": "c566b44a-7a1d-4875-9ee8-6a4e2758fc09",
+  "startDate": "2026-12-01",
+  "endDate": "2027-11-30"
+}
+GET
+view by tenant
+http://localhost:5000/api/rentalrequest/my-requests
+﻿
+
+DELETE
+delete by tenant
+http://localhost:5000/api/rentalrequest/632e4167-f099-43a9-8dde-1afdbd8eeb76
+﻿
+
+PATCH
+update by tenant
+http://localhost:5000/api/rentalrequest/453fd7f0-422e-41fd-a3d5-d921272fd3d1
+﻿
+
+PATCH
+update status of tenant by landlord
+http://localhost:5000/api/rentalrequest/70abcaff-44f5-4973-b6f6-771aad0df675
+﻿
+
+Body
+raw (json)
+json
+{
+  "startDate": "2026-12-01",
+  "endDate": "2028-11-30"
+}
+GET
+get all request by tenant
+http://localhost:5000/api/rentalrequest/my-requests
+﻿
+
+GET
+get all request of property by landlord
+http://localhost:5000/api/rentalrequest/landlord/580993a3-aed1-4153-85b1-315f61049308
+﻿
+
+Body
+raw (json)
+review
+﻿
+
+POST
+create review
+http://localhost:5000/api/reviews
+﻿
+
+Body
+raw (json)
+View More
+json
+{
+  "rentalRequestId": "fc037521-84d4-4241-b392-0f5c2726ebea",
+  "rating": 5,
+  "comment": "Amazing property, very responsive landlord and smooth rental process!"
+}
+GET
+get tenant review by reqid
+http://localhost:5000/api/reviews/my-reviews
+﻿
+
+GET
+get review by property id by tenant
+﻿
+
+PATCH
+update review by tenant
+http://localhost:5000/api/reviews/1f387ccc-e578-412f-a206-8c92eafeceae
+﻿
+
+Body
+raw (json)
+View More
+json
+{
+  "rating": 4,
+  "comment": "Updated review: Extremely peaceful neighborhood and wonderful landlord support!"
+}
+DELETE
+delete review by tenant
+http://localhost:5000/api/reviews/1f387ccc-e578-412f-a206-8c92eafeceae
+﻿
+
+GET
+get all review by landlord
+http://localhost:5000/api/reviews/property/69463ba1-3afe-4527-b1c1-318576af0f59
+﻿
+
+payment
+﻿
+
+POST
+create checkout session
+http://localhost:5000/api/payments/checkout
+﻿
+
+Body
+raw (json)
+json
+{
+    "rentalRequestId" :"63d93e40-72f6-42f7-984d-822113de6f98"
+}
