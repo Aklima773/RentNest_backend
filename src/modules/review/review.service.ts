@@ -1,16 +1,34 @@
+
+import { PaymentStatus } from "../../../prisma/schema/generated/prisma";
 import { prisma } from "../../lib/prisma";
 import { ICreateReviewRequest, IUpdateReviewRequest } from "./review.interface";
 
-// 1. Tenant creates a review for a completed rental
-const createReviewIntoDB = async (tenantId: string, payload: ICreateReviewRequest) => {
-    
+// 1. Tenant creates a review only after payment status is completed
+const createReviewIntoDB = async (
+  tenantId: string,
+  payload: ICreateReviewRequest
+) => {
   const { rentalRequestId, rating, comment } = payload;
 
-  // Check if rental request exists and belongs to this tenant
+  if (!rentalRequestId) {
+    throw new Error("Rental request ID is required.");
+  }
+
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+    throw new Error("Rating must be an integer between 1 and 5.");
+  }
+
+  if (!comment || typeof comment !== "string" || !comment.trim()) {
+    throw new Error("Comment is required.");
+  }
+
+  // Verify rental request exists, belongs to this tenant, and payment is completed
   const rentalRequest = await prisma.rentalRequest.findUnique({
     where: { id: rentalRequestId },
-    include: { property: true,
-     },
+    include: {
+      property: true,
+      payment: true,
+    },
   });
 
   if (!rentalRequest) {
@@ -21,47 +39,55 @@ const createReviewIntoDB = async (tenantId: string, payload: ICreateReviewReques
     throw new Error("You are not authorized to review this rental.");
   }
 
-  // Ensure rental is completed
-  if (rentalRequest.status !== "completed") {
-    throw new Error("You can only leave a review after the rental is completed.");
+  if (
+    !rentalRequest.payment ||
+    rentalRequest.payment.status !== PaymentStatus.completed
+  ) {
+    throw new Error(
+      "You can only leave a review after your payment is completed."
+    );
   }
 
-  // Check if a review already exists for this rental request
-  const existingReview = await prisma.review.findFirst({
+  // rentalRequestId is @unique on Review
+  const existingReview = await prisma.review.findUnique({
     where: { rentalRequestId },
   });
 
   if (existingReview) {
-    throw new Error("You have already reviewed this rental.");
+    throw new Error("You have already submitted a review for this rental.");
   }
 
-  // Create the review
   const review = await prisma.review.create({
     data: {
-      rating,
-      comment,
-      rentalRequestId,
       propertyId: rentalRequest.propertyId,
       tenantId,
+      rentalRequestId,
+      rating,
+      comment: comment.trim(),
     },
     include: {
       property: true,
       tenant: {
         select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        profile: true, // Includes tenant profile data
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          profile: true,
+        },
       },
-      }
+      rentalRequest: {
+        include: {
+          payment: true,
+        },
+      },
     },
   });
 
   return review;
 };
 
-
+// 2. Tenant views all their own reviews
 const getReviewsByTenantFromDB = async (tenantId: string) => {
   const reviews = await prisma.review.findMany({
     where: { tenantId },
@@ -71,7 +97,11 @@ const getReviewsByTenantFromDB = async (tenantId: string) => {
           category: true,
         },
       },
-      rentalRequest: true,
+      rentalRequest: {
+        include: {
+          payment: true,
+        },
+      },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -79,33 +109,49 @@ const getReviewsByTenantFromDB = async (tenantId: string) => {
   return reviews;
 };
 
-const getReviewsByTenantBypropertyIdFromDB = async (tenantId: string, propertyId: string) => {
-  
-    const reviews = await prisma.review.findMany({
-    where: { tenantId,
-        propertyId
-     },
+// 3. Tenant views their own reviews for a specific property
+const getReviewsByTenantByPropertyIdFromDB = async (
+  tenantId: string,
+  propertyId: string
+) => {
+  const reviews = await prisma.review.findMany({
+    where: {
+      tenantId,
+      propertyId,
+    },
     include: {
       property: {
         include: {
           category: true,
         },
       },
-      rentalRequest: true,
+      rentalRequest: {
+        include: {
+          payment: true,
+        },
+      },
     },
     orderBy: { createdAt: "desc" },
   });
 
-  if (!reviews || reviews.length === 0) {
-    throw new Error("No reviews found for this property by this tenant.");
-  }
-
   return reviews;
 };
-// 2. Tenant updates their review
-const updateReviewIntoDB = async (tenantId: string, reviewId: string, payload: IUpdateReviewRequest) => {
+
+// 4. Tenant updates their own review (rating and/or comment)
+const updateReviewIntoDB = async (
+  tenantId: string,
+  reviewId: string,
+  payload: IUpdateReviewRequest
+) => {
   const review = await prisma.review.findUnique({
     where: { id: reviewId },
+    include: {
+      rentalRequest: {
+        include: {
+          payment: true,
+        },
+      },
+    },
   });
 
   if (!review) {
@@ -116,15 +162,53 @@ const updateReviewIntoDB = async (tenantId: string, reviewId: string, payload: I
     throw new Error("You are not authorized to update this review.");
   }
 
+  if (
+    !review.rentalRequest?.payment ||
+    review.rentalRequest.payment.status !== PaymentStatus.completed
+  ) {
+    throw new Error("You can only edit a review for a completed payment.");
+  }
+
+  const updateData: IUpdateReviewRequest = {};
+
+  if (payload.rating !== undefined) {
+    if (!Number.isInteger(payload.rating) || payload.rating < 1 || payload.rating > 5) {
+      throw new Error("Rating must be an integer between 1 and 5.");
+    }
+    updateData.rating = payload.rating;
+  }
+
+  if (payload.comment !== undefined) {
+    if (typeof payload.comment !== "string" || !payload.comment.trim()) {
+      throw new Error("Comment cannot be empty.");
+    }
+    updateData.comment = payload.comment.trim();
+  }
+
+  if (Object.keys(updateData).length === 0) {
+    throw new Error("Provide at least rating or comment to update.");
+  }
+
   const updatedReview = await prisma.review.update({
     where: { id: reviewId },
-    data: payload,
+    data: updateData,
+    include: {
+      property: true,
+      tenant: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          profile: true,
+        },
+      },
+    },
   });
 
   return updatedReview;
 };
 
-// 3. Tenant deletes their review
+// 5. Tenant deletes their own review
 const deleteReviewFromDB = async (tenantId: string, reviewId: string) => {
   const review = await prisma.review.findUnique({
     where: { id: reviewId },
@@ -145,49 +229,29 @@ const deleteReviewFromDB = async (tenantId: string, reviewId: string) => {
   return null;
 };
 
-// 4. Landlord views their rental history and associated reviews/tenants
-const getLandlordPropertyReviewsFromDB = async (landlordId: string) => {
-  const properties = await prisma.property.findMany({
-    where: { landlordId },
-    include: {
-      rentalRequests: {
-        where: { status: "completed" },
-        include: {
-          tenant: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              profile: true,
-            },
-          },
-          review: true, // Includes the review left for this completed rental
-          payment: true,
-        },
-        orderBy: { updatedAt: "desc" },
-      },
-    },
-  });
-
-  return properties;
-};
-const getAllReviewsByPropertyIdFromDB = async (landlordId: string, propertyId: string) => {
-  // 1. Verify that the property exists and belongs to this landlord
-  const property = await prisma.property.findFirst({
-    where: {
-      id: propertyId,
-      landlordId,
-    },
+// 6. Landlord views reviews ONLY for a property they own (by propertyId)
+const getAllReviewsByPropertyIdFromDB = async (
+  landlordId: string,
+  propertyId: string
+) => {
+  const property = await prisma.property.findUnique({
+    where: { id: propertyId },
   });
 
   if (!property) {
-    throw new Error("Property not found or you are not authorized to view it.");
+    throw new Error("Property not found.");
   }
 
-  // 2. Fetch all reviews for this specific property directly from the Review model (cleaner and more direct)
+  if (property.landlordId !== landlordId) {
+    throw new Error("You are not authorized to view reviews for this property.");
+  }
+
   const reviews = await prisma.review.findMany({
     where: {
       propertyId,
+      property: {
+        landlordId,
+      },
     },
     include: {
       tenant: {
@@ -221,8 +285,7 @@ export const reviewService = {
   createReviewIntoDB,
   updateReviewIntoDB,
   deleteReviewFromDB,
-  getLandlordPropertyReviewsFromDB,
   getReviewsByTenantFromDB,
-  getReviewsByTenantBypropertyIdFromDB,
-  getAllReviewsByPropertyIdFromDB
+  getReviewsByTenantByPropertyIdFromDB,
+  getAllReviewsByPropertyIdFromDB,
 };
