@@ -33,4 +33,15 @@ Postman Api Collections:
          tenant(Delete /api/reviews/:id)                 
          landlord(Get /api/reviews/property/:propertyId)       
 
-7. Payment tenant(Post /api/payments/checkout)          
+7. Payment tenant(Post /api/payments/checkout)     
+
+
+Admin Credentials:
+
+1. Name: Abdul
+   Email: abdulk@gmail.com
+   Password: 123456
+
+2. Name: karim
+   Email: kkarim@gmail.com
+   Password: 123456   
