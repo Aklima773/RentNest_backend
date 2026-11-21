@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { auth } from "../../middlewares/auth";
-import { UserRole } from "../../../generated/prisma";
+
 import { categoryController } from "./category.controller";
+import { UserRole } from "../../../prisma/schema/generated/prisma";
 
 
 

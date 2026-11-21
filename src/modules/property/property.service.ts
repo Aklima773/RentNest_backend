@@ -1,13 +1,17 @@
-import { UserRole } from "../../../generated/prisma";
+
+
+import { UserRole } from "../../../prisma/schema/generated/prisma";
 import { prisma } from "../../lib/prisma";
-import { ICreatePropertyRequest, IUpdatePropertyRequest } from "./property.interface";
-import { PaymentStatus } from './../../../prisma/src/generated/prisma/index.d';
+import { ICreatePropertyRequest, IPropertyQuery, IUpdatePropertyRequest } from "./property.interface";
+
+
+
 
 const createProperty = async(payload: ICreatePropertyRequest, userId : string)=>{
 
 // Use a transaction to ensure both role upgrade and property creation succeed together
 
-const result = await prisma.$transaction(async (tx) => {
+const result = await prisma.$transaction(async (tx: any) => {
   
     const user = await tx.user.findUniqueOrThrow({
       where: {
@@ -42,16 +46,135 @@ const result = await prisma.$transaction(async (tx) => {
   return result;
 };
 
+const ALLOWED_SORT_FIELDS = ["createdAt", "price", "title", "location"];
 
-const getAllPropertiesFromDB = async () => {
-  const properties = await prisma.property.findMany({
-    include: {
-      category: true,
+type PropertyWhereInput = NonNullable<
+  Parameters<typeof prisma.property.findMany>[0]
+>["where"];
+
+const andConditions: NonNullable<PropertyWhereInput>[] = [];
+
+
+
+
+const getAllPropertiesFromDB = async (query: IPropertyQuery = {}) => {
+  const limit = Math.max(Number(query.limit) || 10, 1);
+  const page = Math.max(Number(query.page) || 1, 1);
+  const skip = (page - 1) * limit;
+  const sortBy =
+    query.sortBy && ALLOWED_SORT_FIELDS.includes(query.sortBy)
+      ? query.sortBy
+      : "createdAt";
+  const sortOrder = query.sortOrder === "asc" ? "asc" : "desc";
+
+  const andConditions: PropertyWhereInput[] = [];
+
+  if (query.searchTerm?.trim()) {
+    const term = query.searchTerm.trim();
+    andConditions.push({
+      OR: [
+        { title: { contains: term, mode: "insensitive" } },
+        { description: { contains: term, mode: "insensitive" } },
+        { location: { contains: term, mode: "insensitive" } },
+      ],
+    });
+  }
+
+  // 2. Filter by location
+  if (query.location?.trim()) {
+    andConditions.push({
+      location: {
+        contains: query.location.trim(),
+        mode: "insensitive",
+      },
+    });
+  }
+
+  // 3. Filter by price range (minPrice / maxPrice)
+  if (query.minPrice !== undefined && query.minPrice !== "") {
+    const min = Number(query.minPrice);
+    if (!Number.isNaN(min)) {
+      andConditions.push({
+        price: { gte: min },
+      });
+    }
+  }
+
+  if (query.maxPrice !== undefined && query.maxPrice !== "") {
+    const max = Number(query.maxPrice);
+    if (!Number.isNaN(max)) {
+      andConditions.push({
+        price: { lte: max },
+      });
+    }
+  }
+
+  // 4. Filter by property type (categoryId or related category name/slug)
+  if (query.categoryId?.trim()) {
+    andConditions.push({
+      categoryId: query.categoryId.trim(),
+    });
+  } else if (query.propertyType?.trim()) {
+    const propType = query.propertyType.trim();
+    andConditions.push({
+      OR: [
+        { categoryId: propType },
+        {
+          category: {
+            is: {
+              name: { equals: propType, mode: "insensitive" },
+            },
+          },
+        },
+      ],
+    });
+  }
+
+  
+
+
+  // 6. Optional availability filter
+  if (query.isAvailable !== undefined && query.isAvailable !== "") {
+    const boolVal =
+      typeof query.isAvailable === "boolean"
+        ? query.isAvailable
+        : query.isAvailable === "true";
+
+    andConditions.push({
+      isAvailable: boolVal,
+    });
+  }
+
+  // const whereCondition: PropertyWhereInput =
+  //   andConditions.length > 0 ? { AND: andConditions } : {};
+
+  const [properties, total] = await Promise.all([
+    prisma.property.findMany({
+     
+      include: {
+        category: true,
+        landlord: {
+          select: { id: true, name: true, email: true },
+        },
+      },
+      orderBy: {
+        [sortBy]: sortOrder,
+      },
+      skip,
+      take: limit,
+    }),
+    prisma.property.count(),
+  ]);
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+      totalPage: Math.ceil(total / limit),
     },
-    orderBy: { createdAt: "desc" },
-  });
-
-  return properties;
+    data: properties,
+  };
 };
 
 const getLandlordPropertiesFromDB = async (landlordId: string) => {

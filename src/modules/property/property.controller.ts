@@ -3,6 +3,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { propertyService } from "./property.service";
+import { IPropertyQuery } from "./property.interface";
 
 const createProperty = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user?.id;
@@ -29,7 +30,9 @@ const getLandlordProperties = catchAsync(async (req: Request, res: Response) => 
 });
 
 const getAllProperties = catchAsync(async (req: Request, res: Response) => {
-  const result = await propertyService.getAllPropertiesFromDB();
+
+  const query = req.query;
+  const result = await propertyService.getAllPropertiesFromDB(req.query);
 
   sendResponse(res, {
     success: true,

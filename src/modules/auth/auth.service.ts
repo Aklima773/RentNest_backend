@@ -13,8 +13,8 @@ const loginUser =async(payload : ILoginUser)=>{
         where : {email}
     })
 
-      if(user.activeStatus === "BLOCKED"){
-            throw new Error("Your account has been blocked. Please contact support ")
+      if(user.isBanned === true){
+            throw new Error("Your account has been banned. Please contact support")
         }
 
     const isPasswordMatched = await bcrypt.compare(password, user.password);
@@ -86,8 +86,8 @@ const  refreshToken =async(refreshToken : string)=>{
         }
     })
 
-    if(user.activeStatus === "BLOCKED"){
-        throw new Error("User is nlocked!")
+    if(user.isBanned === true){
+        throw new Error("User is Banned!")
     }
 
     const jwtPayload ={

@@ -2,7 +2,8 @@ import { prisma } from "../../lib/prisma";
 import config from "../../config";
 import bcrypt from "bcryptjs";
 import { RegisterUserPayload, UpdateStatusPayload } from "./user.interface";
-import { UserRole } from "../../../generated/prisma";
+import { UserRole } from "../../../prisma/schema/generated/prisma";
+
 
 
 

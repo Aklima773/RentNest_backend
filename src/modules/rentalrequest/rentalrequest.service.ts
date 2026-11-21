@@ -1,7 +1,8 @@
+import { RequestStatus } from "../../../prisma/schema/generated/prisma";
 import { prisma } from "../../lib/prisma";
 
 import { ICreateRentalRequest, IUpdateRentalRequest, IUpdateRentalStatusRequest } from "./rentalrequest.interface";
-import { RequestStatus } from "../../../generated/prisma";
+
 import httpStatus from "http-status";
 
 

@@ -1,4 +1,5 @@
-import { PaymentMethod, PaymentStatus } from "../../../generated/prisma";
+
+import { PaymentMethod, PaymentStatus } from "../../../prisma/schema/generated/prisma";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { stripe } from "../../lib/stripe";
