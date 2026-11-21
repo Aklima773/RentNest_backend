@@ -10,7 +10,7 @@ const router = Router();
 
 
 router.get("/allusers",
-    
+    auth(UserRole.admin),
     userController.getAllUsers
 )
 
