@@ -25,3 +25,12 @@ Postman Api Collections:
                  tenant(Patch /api/rentalrequest/:id)
                  landlord(Patch /api/rentalrequest/:id/status)
                  landlord(Get /api/rentalrequest/landlord/:propertyId)
+
+6.Review tenant(Post /api/reviews)                 
+         tenant(Get /api/reviews/my-reviews)                 
+         tenant(Get /api/reviews/my-reviews/:propertyId)                 
+         tenant(Patch /api/reviews/:id)                 
+         tenant(Delete /api/reviews/:id)                 
+         landlord(Get /api/reviews/property/:propertyId)       
+
+7. Payment tenant(Post /api/payments/checkout)          
