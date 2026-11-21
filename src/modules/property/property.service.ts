@@ -1,6 +1,4 @@
-
-
-import { UserRole } from "../../../prisma/schema/generated/prisma";
+import { UserRole } from "../../../prisma/generated/prisma";
 import { prisma } from "../../lib/prisma";
 import { ICreatePropertyRequest, IPropertyQuery, IUpdatePropertyRequest } from "./property.interface";
 

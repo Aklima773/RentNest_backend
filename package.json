@@ -8,7 +8,8 @@
   "main": "sever.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "postinstall": "npx prisma generate",
+    "build": "npx prisma generate && tsc",
     "start": "node dist/server.js",
     "stripe:webhook": "stripe listen --all-snapshot --forward-to localhost:5000/api/subscription/webhook",
     "test": "echo \"Error: no test specified\" && exit 1",

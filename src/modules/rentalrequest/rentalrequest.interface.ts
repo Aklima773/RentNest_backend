@@ -1,4 +1,5 @@
-import { RequestStatus } from "../../../generated/prisma";
+import { RequestStatus } from "../../../prisma/generated/prisma";
+
 
 
 export interface ICreateRentalRequest {

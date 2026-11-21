@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { paymentController } from "./payment.controller";
 import { auth } from "../../middlewares/auth";
-import { UserRole } from "../../../prisma/schema/generated/prisma";
+import { UserRole } from "../../../prisma/generated/prisma";
 
 // Matches your UserRole enum in Prisma schema
 

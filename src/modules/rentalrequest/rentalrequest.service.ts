@@ -1,4 +1,4 @@
-import { RequestStatus } from "../../../prisma/schema/generated/prisma";
+import { RequestStatus } from "../../../prisma/generated/prisma";
 import { prisma } from "../../lib/prisma";
 
 import { ICreateRentalRequest, IUpdateRentalRequest, IUpdateRentalStatusRequest } from "./rentalrequest.interface";

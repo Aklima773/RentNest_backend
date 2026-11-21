@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { userController } from "./user.controller";
 import { auth } from "../../middlewares/auth";
-import { UserRole } from "../../../prisma/schema/generated/prisma";
+import { UserRole } from "../../../prisma/generated/prisma";
 
 
 

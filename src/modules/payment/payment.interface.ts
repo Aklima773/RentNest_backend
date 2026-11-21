@@ -1,5 +1,4 @@
-import { PaymentMethod, PaymentStatus } from "../../../generated/prisma";
-
+import { PaymentMethod, PaymentStatus } from "../../../prisma/generated/prisma";
 
 // 1. Payload sent from frontend to initiate checkout
 export interface ICreateCheckoutSessionPayload {

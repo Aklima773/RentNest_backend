@@ -5,7 +5,8 @@ import { jwtUtils } from "../utils/jwt";
 import config from "../config";
 import { JwtPayload } from "jsonwebtoken";
 import { prisma } from "../lib/prisma";
-import { UserRole } from "../../generated/prisma";
+import { UserRole } from "../../prisma/generated/prisma";
+
 
 declare global{
 

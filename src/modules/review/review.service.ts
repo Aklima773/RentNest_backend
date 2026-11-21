@@ -1,5 +1,5 @@
 
-import { PaymentStatus } from "../../../prisma/schema/generated/prisma";
+import { PaymentStatus } from "../../../prisma/generated/prisma";
 import { prisma } from "../../lib/prisma";
 import { ICreateReviewRequest, IUpdateReviewRequest } from "./review.interface";
 

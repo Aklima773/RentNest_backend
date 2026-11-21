@@ -45,3 +45,6 @@ Admin Credentials:
 2. Name: karim
    Email: kkarim@gmail.com
    Password: 123456   
+
+
+Payment Integration using stripe
