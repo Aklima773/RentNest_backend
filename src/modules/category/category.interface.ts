@@ -6,4 +6,8 @@ export interface ICreateCategoryRequest {
 export interface IUpdateCategoryRequest {
   name?: string;
   description?: string;
+  description?: string;
+  description?: string;
+  description?: string;
+  description?: string;
 }
