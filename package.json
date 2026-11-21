@@ -10,7 +10,7 @@
     "dev": "tsx watch src/server.ts",
     "postinstall": "npx prisma generate",
     "build": "npx prisma generate && tsc",
-    "start": "node dist/server.js",
+    "start": "npx tsx dist/server.js",
     "stripe:webhook": "stripe listen --all-snapshot --forward-to localhost:5000/api/subscription/webhook",
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "prisma migrate dev"
