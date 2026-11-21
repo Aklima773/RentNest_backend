@@ -7,7 +7,7 @@ users
 
 POST
 register
-http://localhost:5000/api/users/register
+https://rentnest-backend-ljeo.onrender.com/api/users/register
 ﻿
 
 Body
@@ -22,14 +22,14 @@ json
 }
 GET
 profile
-http://localhost:5000/api/users/me
+https://rentnest-backend-ljeo.onrender.com/api/users/me
 ﻿
 
 Body
 raw (json)
 PUT
 update my profile
-http://localhost:5000/api/users/my-profile
+https://rentnest-backend-ljeo.onrender.com/api/users/my-profile
 ﻿
 
 Body
@@ -42,12 +42,12 @@ json
 }
 GET
 get all user
-http://localhost:5000/api/users/allusers
+https://rentnest-backend-ljeo.onrender.com/api/users/allusers
 ﻿
 
 PUT
 Update user status
-http://localhost:5000/api/users/1df06973-622e-45e6-ad6b-f91c42893f97
+https://rentnest-backend-ljeo.onrender.com/api/users/1df06973-622e-45e6-ad6b-f91c42893f97
 ﻿
 
 Body
@@ -76,7 +76,7 @@ property
 
 POST
 createproperty
-http://localhost:5000/api/properties
+https://rentnest-backend-ljeo.onrender.com/api/properties
 ﻿
 
 Body
@@ -93,12 +93,12 @@ json
 }
 GET
 get all properties
-http://localhost:5000/api/properties
+https://rentnest-backend-ljeo.onrender.com/api/properties
 ﻿
 
 PATCH
 update propert by landlord
-http://localhost:5000/api/properties/6051aa61-3b58-447e-ab21-5aa05948062b
+https://rentnest-backend-ljeo.onrender.com/api/properties/6051aa61-3b58-447e-ab21-5aa05948062b
 ﻿
 
 Body
@@ -110,12 +110,12 @@ json
 }get
 GET
 get property by id by landlord
-http://localhost:5000/api/properties/6051aa61-3b58-447e-ab21-5aa05948062b
+https://rentnest-backend-ljeo.onrender.com/api/properties/6051aa61-3b58-447e-ab21-5aa05948062b
 ﻿
 
 DELETE
 delete property by landlord
-http://localhost:5000/api/properties/08002ee9-bf09-44db-a2c7-b45d4b1ed956
+https://rentnest-backend-ljeo.onrender.com/api/properties/08002ee9-bf09-44db-a2c7-b45d4b1ed956
 ﻿
 
 category
@@ -123,7 +123,7 @@ category
 
 POST
 createcategory
-http://localhost:5000/api/categories
+https://rentnest-backend-ljeo.onrender.com/api/categories
 ﻿
 
 Body
@@ -136,12 +136,12 @@ json
 }
 GET
 get all category
-http://localhost:5000/api/categories
+https://rentnest-backend-ljeo.onrender.com/api/categories
 ﻿
 
 PUT
 update category
-http://localhost:5000/api/categories/0fbdacbd-40df-410f-bde3-aa7a79fb79fd
+https://rentnest-backend-ljeo.onrender.com/api/categories/0fbdacbd-40df-410f-bde3-aa7a79fb79fd
 ﻿
 
 Body
@@ -154,12 +154,12 @@ json
 }
 DELETE
 delete category
-http://localhost:5000/api/categories/055d9b6f-8ee3-400c-a281-b13a3d8f7c96
+https://rentnest-backend-ljeo.onrender.com/api/categories/055d9b6f-8ee3-400c-a281-b13a3d8f7c96
 ﻿
 
 GET
 get category by id
-http://localhost:5000/api/categories/0a0a0698-4a4a-4cdb-bdc7-3fd1e6a5e8de
+https://rentnest-backend-ljeo.onrender.com/api/categories/0a0a0698-4a4a-4cdb-bdc7-3fd1e6a5e8de
 ﻿
 
 rentalrequest
@@ -167,7 +167,7 @@ rentalrequest
 
 POST
 requestCreate
-http://localhost:5000/api/rentalrequest
+https://rentnest-backend-ljeo.onrender.com/api/rentalrequest
 ﻿
 
 Body
@@ -180,22 +180,22 @@ json
 }
 GET
 view by tenant
-http://localhost:5000/api/rentalrequest/my-requests
+https://rentnest-backend-ljeo.onrender.com/api/rentalrequest/my-requests
 ﻿
 
 DELETE
 delete by tenant
-http://localhost:5000/api/rentalrequest/632e4167-f099-43a9-8dde-1afdbd8eeb76
+https://rentnest-backend-ljeo.onrender.com/api/rentalrequest/632e4167-f099-43a9-8dde-1afdbd8eeb76
 ﻿
 
 PATCH
 update by tenant
-http://localhost:5000/api/rentalrequest/453fd7f0-422e-41fd-a3d5-d921272fd3d1
+https://rentnest-backend-ljeo.onrender.com/api/rentalrequest/453fd7f0-422e-41fd-a3d5-d921272fd3d1
 ﻿
 
 PATCH
 update status of tenant by landlord
-http://localhost:5000/api/rentalrequest/70abcaff-44f5-4973-b6f6-771aad0df675
+https://rentnest-backend-ljeo.onrender.com/api/rentalrequest/70abcaff-44f5-4973-b6f6-771aad0df675
 ﻿
 
 Body
@@ -207,12 +207,12 @@ json
 }
 GET
 get all request by tenant
-http://localhost:5000/api/rentalrequest/my-requests
+https://rentnest-backend-ljeo.onrender.com/api/rentalrequest/my-requests
 ﻿
 
 GET
 get all request of property by landlord
-http://localhost:5000/api/rentalrequest/landlord/580993a3-aed1-4153-85b1-315f61049308
+https://rentnest-backend-ljeo.onrender.com/api/rentalrequest/landlord/580993a3-aed1-4153-85b1-315f61049308
 ﻿
 
 Body
@@ -222,7 +222,7 @@ review
 
 POST
 create review
-http://localhost:5000/api/reviews
+https://rentnest-backend-ljeo.onrender.com/api/reviews
 ﻿
 
 Body
@@ -236,7 +236,7 @@ json
 }
 GET
 get tenant review by reqid
-http://localhost:5000/api/reviews/my-reviews
+https://rentnest-backend-ljeo.onrender.com/api/reviews/my-reviews
 ﻿
 
 GET
@@ -245,7 +245,7 @@ get review by property id by tenant
 
 PATCH
 update review by tenant
-http://localhost:5000/api/reviews/1f387ccc-e578-412f-a206-8c92eafeceae
+https://rentnest-backend-ljeo.onrender.com/api/reviews/1f387ccc-e578-412f-a206-8c92eafeceae
 ﻿
 
 Body
@@ -258,12 +258,12 @@ json
 }
 DELETE
 delete review by tenant
-http://localhost:5000/api/reviews/1f387ccc-e578-412f-a206-8c92eafeceae
+https://rentnest-backend-ljeo.onrender.com/api/reviews/1f387ccc-e578-412f-a206-8c92eafeceae
 ﻿
 
 GET
 get all review by landlord
-http://localhost:5000/api/reviews/property/69463ba1-3afe-4527-b1c1-318576af0f59
+https://rentnest-backend-ljeo.onrender.com/api/reviews/property/69463ba1-3afe-4527-b1c1-318576af0f59
 ﻿
 
 payment
@@ -271,7 +271,7 @@ payment
 
 POST
 create checkout session
-http://localhost:5000/api/payments/checkout
+https://rentnest-backend-ljeo.onrender.com/api/payments/checkout
 ﻿
 
 Body
